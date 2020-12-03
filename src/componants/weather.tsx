@@ -32,28 +32,30 @@ export const Weather = () => {
   const ApiKey = "219d801f59d66e8ffe10f034f3e71979";
 
   useEffect(() => {
+    const _myCities: Array<Number> = JSON.parse(myCities);
     const fetchData = async () => {
       try {
-        const _myCities: Array<Number> = JSON.parse(myCities);
-        if (_myCities.length > 0) {
-          const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/group?id=${_myCities.toString()}&appid=${ApiKey}`
-          );
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/group?id=${_myCities.toString()}&appid=${ApiKey}`
+        );
 
-          if (response.ok) {
-            var data = await response.json();
-            setCitiesWeather(data.list);
-            setError("");
-          } else {
-            setError("Error Occured");
-          }
+        if (response.ok) {
+          var data = await response.json();
+          setCitiesWeather(data.list);
+          setError("");
+        } else {
+          setError("Error Occured");
         }
       } catch (error) {
         setError(error.message);
       }
     };
 
-    if (myCities.length > 0) fetchData();
+    if (_myCities.length > 0) {
+      fetchData();
+    } else {
+      setCitiesWeather([]);
+    }
   }, [myCities, setCitiesWeather]);
 
   useEffect(() => {
@@ -139,11 +141,9 @@ export const Weather = () => {
           </Row>
           <Row>
             <Col span={22} offset={1} style={{ paddingBottom: "32px" }}>
-              {myCities.length > 0 &&
-                error === "" &&
-                citiesWeather?.length > 1 && (
-                  <WeatherTable citiesWeather={citiesWeather} />
-                )}
+              {citiesWeather?.length > 0 && error === "" && (
+                <WeatherTable citiesWeather={citiesWeather} />
+              )}
               {error !== "" && (
                 <Result
                   title={error}
