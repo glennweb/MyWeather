@@ -17,7 +17,7 @@ export const WeatherTable = ({
     {
       title: "Feels Like",
       dataIndex: ["main", "feels_like"],
-      key: "feelLike",
+      key: "feels_like",
       sorter: (a: CityWeather, b: CityWeather) =>
         a.main.feels_like - b.main.feels_like,
     },
@@ -31,7 +31,7 @@ export const WeatherTable = ({
     {
       title: "Pressure",
       dataIndex: ["main", "pressure"],
-      key: "humidity",
+      key: "pressure",
       sorter: (a: CityWeather, b: CityWeather) =>
         a.main.pressure - b.main.pressure,
     },
@@ -62,7 +62,7 @@ export const WeatherTable = ({
       dataSource={citiesWeather}
       columns={columns}
       rowKey={(record) => record.id}
-      pagination={{ defaultCurrent: 6, total: 500, pageSize: 100 }}
+      pagination={{ pageSize: 20 }}
     />
   );
 };
