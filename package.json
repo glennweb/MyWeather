@@ -24,7 +24,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +48,8 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.165",
+    "gh-pages": "^3.1.0",
     "typescript": "^4.1.2"
-  }
+  },
+  "homepage": "http://glennweb.github.io/weather"
 }
