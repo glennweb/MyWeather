@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 //import data from "../Repository/city.list.json";
 import { City } from "../interfaces/City";
-import { Col, Row, Layout, Select, Tag, Result, Spin } from "antd";
+import { Col, Row, Layout, Select, Tag, Result, Spin, Button } from "antd";
 import Title from "antd/lib/typography/Title";
 import * as _ from "lodash";
 import styled from "styled-components";
@@ -31,26 +31,27 @@ export const Weather = () => {
 
   const ApiKey = "219d801f59d66e8ffe10f034f3e71979";
 
+  const fetchData = async () => {
+    const _myCities: Array<Number> = JSON.parse(myCities);
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/group?id=${_myCities.toString()}&appid=${ApiKey}`
+      );
+
+      if (response.ok) {
+        var data = await response.json();
+        setCitiesWeather(data.list);
+        setError("");
+      } else {
+        setError("Error Occured");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   useEffect(() => {
     const _myCities: Array<Number> = JSON.parse(myCities);
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/group?id=${_myCities.toString()}&appid=${ApiKey}`
-        );
-
-        if (response.ok) {
-          var data = await response.json();
-          setCitiesWeather(data.list);
-          setError("");
-        } else {
-          setError("Error Occured");
-        }
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
     if (_myCities.length > 0) {
       fetchData();
     } else {
@@ -92,6 +93,10 @@ export const Weather = () => {
 
   const handleChange = (value: Array<number>) => {
     setMyCities(JSON.stringify(value));
+  };
+
+  const handleRefresh = () => {
+    fetchData();
   };
 
   return (
@@ -137,6 +142,11 @@ export const Weather = () => {
                   );
                 })}
               </Select>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={22} offset={1} style={{ paddingBottom: "12px" }}>
+              <Button onClick={handleRefresh}>Refresh</Button>
             </Col>
           </Row>
           <Row>
